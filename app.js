@@ -9,9 +9,16 @@ window.addEventListener('keyup', toggleTimer);
 let ul = document.getElementById("timeList");
 let li = document.getElementsByTagName("li");
 
-const scrambleCharacters = ['R', 'L', 'R\'', 'L\'', 'U', 'D', 'U\'', 'D\'', 'F', 'B', 'F\'', 'B\'', 'R2', 'L2', 'U2', 'D2', 'F2', 'B2']
-
 createScramble();
+
+function randInt (max) {
+    return Math.floor(Math.random() * max);
+  }
+  
+  function randEntry (arr) {
+    return arr[randInt(arr.length)];
+  }
+  
 
 function toggleTimer(evt) {
     if (evt.code !== "Space" || evt.repeat)
@@ -82,7 +89,22 @@ function addTime(time) {
 }
 
 function createScramble() {
-    var scramble = scrambleCharacters[Math.floor(Math.random() * 18)].concat(' ', scrambleCharacters[Math.floor(Math.random() * 18)], ' ', scrambleCharacters[Math.floor(Math.random() * 18)], ' ', scrambleCharacters[Math.floor(Math.random() * 18)], ' ', scrambleCharacters[Math.floor(Math.random() * 18)], ' ', scrambleCharacters[Math.floor(Math.random() * 18)], ' ', scrambleCharacters[Math.floor(Math.random() * 18)], ' ', scrambleCharacters[Math.floor(Math.random() * 18)], ' ', scrambleCharacters[Math.floor(Math.random() * 18)], ' ', scrambleCharacters[Math.floor(Math.random() * 18)], ' ', scrambleCharacters[Math.floor(Math.random() * 18)], ' ', scrambleCharacters[Math.floor(Math.random() * 18)], ' ', scrambleCharacters[Math.floor(Math.random() * 18)], ' ', scrambleCharacters[Math.floor(Math.random() * 18)], ' ', scrambleCharacters[Math.floor(Math.random() * 18)], ' ', scrambleCharacters[Math.floor(Math.random() * 18)], ' ', scrambleCharacters[Math.floor(Math.random() * 18)], ' ', scrambleCharacters[Math.floor(Math.random() * 18)], ' ', scrambleCharacters[Math.floor(Math.random() * 18)], ' ', scrambleCharacters[Math.floor(Math.random() * 18)]);
+    const sides = [ "R", "L", "U", "D", "F", "B" ];
+    const directions = [ "", "'", "2" ];
 
-    scram.innerHTML = scramble;
+    const moves = [];
+
+      let lastSideMoved = "",
+    currentSide = "";
+
+    for (let i = 0; i < 20; ++i) {
+    do {
+        currentSide = randEntry(sides);
+    } while (currentSide === lastSideMoved);
+
+    lastSideMoved = currentSide;
+    moves.push(currentSide + randEntry(directions));
+    }
+
+    scram.textContent = moves.join(" ");
 }
