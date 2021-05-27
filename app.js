@@ -11,7 +11,6 @@ let li = document.getElementsByTagName("li");
 
 let times = [];
 
-
 createScramble();
 
 function randInt (max) {
@@ -28,7 +27,32 @@ function randInt (max) {
     }
 }
   
+function convertTimeToMs(m, s, ms) {
+    return (m * 60 + s) * 1000 + ms;
+  }
 
+  function convertTimeFromMs (ms) {
+    let remainingSeconds = Math.floor(ms / 1000);
+    const remainingMs = ms - remainingSeconds * 1000;
+    const minutes = Math.floor(remainingSeconds / 60);
+    remainingSeconds -= minutes * 60;
+  
+    return {
+      ms: remainingMs,
+      s: remainingSeconds,
+      min: minutes
+    };
+  }
+  
+  function timeObjToStr ({ ms, s, min }) {
+    return `${
+      String(min).padStart(2, "0")
+    }:${
+      String(s).padStart(2, "0")
+    }:${
+      String(ms).slice(0, 2)
+    }`;
+  }
 function toggleTimer(evt) {
     if (evt.code !== "Space" || evt.repeat)
         return; 
@@ -42,7 +66,8 @@ function toggleTimer(evt) {
     } else if (!stoptime) {
         stoptime = true;
         createScramble();
-        addTime(sec + ':' + min + "." + milisec);
+        console.log(convertTimeToMs(min, sec, milisec));
+        addTime(convertTimeToMs(min, sec, milisec));
     }
 }
 
@@ -92,6 +117,7 @@ function resetTimer() {
     timer.innerHTML = '00:00.00'
     sec = 0;
     min = 0;
+    milisec = 0;
     stopTimer(); 
 }
 
@@ -104,22 +130,33 @@ function addTime(time) {
 function updateTimes() {
     removeAllChildNodes(ul);
     for (var i = 0; i < times.length; i++) {
+        const timeObj = convertTimeFromMs(times[i]);
+        const str = timeObjToStr(timeObj);
         console.log(times[i]);
         const li = document.createElement("li");
 
-        li.append(document.createTextNode(times[i]));
+        li.append(document.createTextNode(str));
 
         ul.appendChild(li);
     }
 
     //mo3
     if (times.length <= 2) {
-        ao5.innerHTML = "N/A";
+        mo3.innerHTML = 'N/A';
     } else if (times.length >= 2) {
+        const time1 = times[times.length - 1];
+        const time2 = times[times.length - 2];
+        const time3 = times[times.length - 3];
+
+        let meanOf3 = (time1 + time2 + time3) / 3;
+
+        const timeObj = convertTimeFromMs(meanOf3);
+        const str = timeObjToStr(timeObj);
+
+        mo3.innerHTML = str;
         
     }
 }
-
 function createScramble() {
     const sides = [ "R", "L", "U", "D", "F", "B" ];
     const directions = [ "", "'", "2" ];
