@@ -8,14 +8,20 @@
 </head>
 <body>
     <div id="scramble">
-        <h2>Scramble: <span id="scram"></span></h2>
+        Color Scheme: <select id="colorSchemePicker">
+            <option value="1">scheme1</option>
+            <option value="2">scheme2</option>
+            <option value="3">scheme3</option>
+            <option value="4">scheme4</option>
+          </select><h2>Scramble: <span id="scram"></span></h2>
     </div>
     <div id="stopwatch">00:00.00</div>
     <ul id="buttons">
         <li><button onclick="resetTimer()">Reset</button></li>
     </ul>
     <div id="times">
-        <h2>Times:</h2>
+        <h2 style="padding-left: 3px;">Times:</h2>
+        <h3>Mo3: <span id="mo3">N/A</span></h3>
         <ul id="timeList">
             
         </ul>

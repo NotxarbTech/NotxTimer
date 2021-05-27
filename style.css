@@ -1,5 +1,5 @@
 body {
-    background: #202020;
+    background: #1A3A3A;
     color: white;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
@@ -36,10 +36,12 @@ button {
 
 #times {
     width: 10%;
-    background-color: green;
+    background-color: #A997DF;
+    padding-top: 10px;
 }
 
 #scramble {
-    background-color: red;
+    background-color: #DDC4DD;
     text-align: center;
+    padding: 4px;
 }

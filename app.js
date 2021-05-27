@@ -9,6 +9,9 @@ window.addEventListener('keyup', toggleTimer);
 let ul = document.getElementById("timeList");
 let li = document.getElementsByTagName("li");
 
+let times = [];
+
+
 createScramble();
 
 function randInt (max) {
@@ -18,6 +21,12 @@ function randInt (max) {
   function randEntry (arr) {
     return arr[randInt(arr.length)];
   }
+
+  function removeAllChildNodes(parent) {
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
+}
   
 
 function toggleTimer(evt) {
@@ -34,6 +43,16 @@ function toggleTimer(evt) {
         stoptime = true;
         createScramble();
         addTime(sec + ':' + min + "." + milisec);
+    }
+}
+
+//for reset function
+function stopTimer() {
+    if (stoptime) {
+        timer.innerHTML = '00' + ':' + '00' + '.' + '00';
+    } else if (!stoptime) {
+        stoptime = true;
+        createScramble();
     }
 }
  
@@ -73,19 +92,32 @@ function resetTimer() {
     timer.innerHTML = '00:00.00'
     sec = 0;
     min = 0;
-    stopTimer();
+    stopTimer(); 
 }
 
 function addTime(time) {
-    const times = JSON.parse(localStorage.getItem('times') || '[]');
-    const li = document.createElement("li");
-    li.append(document.createTextNode(time));
-
-    ul.appendChild(li);
-
     times.push(time);
 
-    localStorage.setItem('times', JSON.stringify(times));
+    updateTimes();
+}
+
+function updateTimes() {
+    removeAllChildNodes(ul);
+    for (var i = 0; i < times.length; i++) {
+        console.log(times[i]);
+        const li = document.createElement("li");
+
+        li.append(document.createTextNode(times[i]));
+
+        ul.appendChild(li);
+    }
+
+    //mo3
+    if (times.length <= 2) {
+        ao5.innerHTML = "N/A";
+    } else if (times.length >= 2) {
+        
+    }
 }
 
 function createScramble() {
@@ -108,3 +140,31 @@ function createScramble() {
 
     scram.textContent = moves.join(" ");
 }
+
+let colorSelector = document.getElementById("colorSchemePicker");
+let colorScheme = 1;
+
+function colorSchemeEvent() {
+    colorScheme = colorSelector.value;
+
+    if (colorScheme == 1) {
+        document.querySelector("body").style.backgroundColor = "#1A3A3A";
+        document.getElementById("times").style.backgroundColor = "#A997DF";
+        document.getElementById("scramble").style.backgroundColor = "#DDC4DD"
+    } else if (colorScheme == 2) {
+        document.querySelector("body").style.backgroundColor = "#3F4739";
+        document.getElementById("times").style.backgroundColor = "#BACBA9";
+        document.getElementById("scramble").style.backgroundColor = "#F1BF98"
+    } else if (colorScheme == 3) {
+        document.querySelector("body").style.backgroundColor = "#8C5E58";
+        document.getElementById("times").style.backgroundColor = "#19323C";
+        document.getElementById("scramble").style.backgroundColor = "#F2545B"
+    } else if (colorScheme == 4) {
+        document.querySelector("body").style.backgroundColor = "#4B5842";
+        document.getElementById("times").style.backgroundColor = "#B7CE63";
+        document.getElementById("scramble").style.backgroundColor = "#DADDD8"
+    }
+}
+
+
+colorSelector.addEventListener("change", colorSchemeEvent);
