@@ -11,9 +11,12 @@ let li = document.getElementsByTagName("li");
 
 let times = [];
 
+let scrambleSelector = document.getElementById("scramblePicker");
+let scrambleType = 333;
+
 createScramble();
 
-function randInt (max) {
+function randInt (max) { 
     return Math.floor(Math.random() * max);
   }
   
@@ -28,7 +31,7 @@ function randInt (max) {
 }
   
 function convertTimeToMs(m, s, ms) {
-    return (m * 60 + s) * 1000 + ms;
+    return (m * 60 + s) * 1000 + parseInt(ms);
   }
 
   function convertTimeFromMs (ms) {
@@ -50,7 +53,7 @@ function convertTimeToMs(m, s, ms) {
     }:${
       String(s).padStart(2, "0")
     }:${
-      String(ms).slice(0, 2)
+      String(ms).padStart(2, "0")
     }`;
   }
 function toggleTimer(evt) {
@@ -148,7 +151,7 @@ function updateTimes() {
         const time2 = times[times.length - 2];
         const time3 = times[times.length - 3];
 
-        let meanOf3 = (time1 + time2 + time3) / 3;
+        let meanOf3 = Math.round((10*(time1 + time2 + time3) / 3)/10);
 
         const timeObj = convertTimeFromMs(meanOf3);
         const str = timeObjToStr(timeObj);
@@ -157,7 +160,29 @@ function updateTimes() {
         
     }
 }
-function createScramble() {
+
+function create222Scramble() {
+    const sides = [ "R", "L", "U", "D", "F", "B" ];
+    const directions = [ "", "'", "2" ];
+
+    const moves = [];
+
+      let lastSideMoved = "",
+    currentSide = "";
+
+    for (let i = 0; i < 10; ++i) {
+    do {
+        currentSide = randEntry(sides);
+    } while (currentSide === lastSideMoved);
+
+    lastSideMoved = currentSide;
+    moves.push(currentSide + randEntry(directions));
+    }
+
+    scram.textContent = moves.join(" ");
+}
+
+function create333Scramble() {
     const sides = [ "R", "L", "U", "D", "F", "B" ];
     const directions = [ "", "'", "2" ];
 
@@ -167,6 +192,27 @@ function createScramble() {
     currentSide = "";
 
     for (let i = 0; i < 20; ++i) {
+    do {
+        currentSide = randEntry(sides);
+    } while (currentSide === lastSideMoved);
+
+    lastSideMoved = currentSide;
+    moves.push(currentSide + randEntry(directions));
+    }
+
+    scram.textContent = moves.join(" ");
+}
+
+function create444Scramble() {
+    const sides = [ "R", "L", "U", "D", "F", "B", "Rw", "Lw", "Uw", "Dw", "Fw", "Bw" ];
+    const directions = [ "", "'", "2" ];
+
+    const moves = [];
+
+      let lastSideMoved = "",
+    currentSide = "";
+
+    for (let i = 0; i < 40; ++i) {
     do {
         currentSide = randEntry(sides);
     } while (currentSide === lastSideMoved);
@@ -205,3 +251,22 @@ function colorSchemeEvent() {
 
 
 colorSelector.addEventListener("change", colorSchemeEvent);
+
+
+
+function createScramble() {
+    scrambleType = scrambleSelector.value;
+
+    if (scrambleType == 333) {
+        create333Scramble()
+    } else if (scrambleType == 222) {
+        create222Scramble()
+    } else if (scrambleType == 444) {
+        create444Scramble()
+    }
+}
+
+scrambleSelector.addEventListener("change", createScramble);
+
+
+
